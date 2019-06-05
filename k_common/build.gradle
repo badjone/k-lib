@@ -46,3 +46,6 @@ dependencies {
     api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     api 'com.squareup.retrofit2:converter-gson:2.4.0'
 }
+
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.wugx.klib' // ××××代表你github名字
