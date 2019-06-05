@@ -1,12 +1,8 @@
-package com.wugx.k_lib
+package com.wugx.klibdemo
 
 import android.os.Bundle
-import android.view.View
-import com.hazz.kotlinmvp.rx.scheduler.SchedulerUtils
 import com.wugx.alarm_pro.net.HttpHelper
-import com.wugx.alarm_pro.utils.PermissionApply
 import com.wugx.k_common.base.BaseActivity
-import com.wugx.k_common.util.utilcode.constant.PermissionConstants
 import com.wugx.k_common.util.utilcode.util.FileUtils
 import com.wugx.k_common.util.utilcode.util.LogUtils
 import com.wugx.k_utils.mvp.model.FileDownloadModel

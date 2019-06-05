@@ -1,4 +1,4 @@
-package com.wugx.k_lib
+package com.wugx.klibdemo
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.wugx.k_lib", appContext.packageName)
+        assertEquals("com.wugx.klibdemo", appContext.packageName)
     }
 }

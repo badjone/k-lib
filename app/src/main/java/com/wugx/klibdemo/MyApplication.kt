@@ -1,4 +1,4 @@
-package com.wugx.k_lib
+package com.wugx.klibdemo
 
 import android.app.Application
 import android.content.Context
