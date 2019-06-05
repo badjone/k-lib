@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">k_common</string>
+    <string name="txt_no_data">暂无数据</string>
+    <string name="tip_retry_again">点击页面重试</string>
+    <string name="txt_no_network">网络异常，请检查网络连接</string>
+    <string name="txt_error">请求错误</string>
+
+
+    <string name="permission_denied_tips">使用[%s]需要授予必要的使用权限哦</string>
+    <string name="permission_refuse_tips">您拒绝了[%s]必要的使用权限，请到 应用-权限 去授予</string>
+    <string name="cancel">取消</string>
+    <string name="txt_set">设置</string>
+
+
+    <string name="connect_error">网络连接失败,请检查网络</string>
+    <string name="connect_timeout">连接超时,请稍后再试</string>
+    <string name="bad_network">服务器异常</string>
+    <string name="parse_error">解析服务器响应数据失败</string>
+    <string name="unknown_error">未知错误</string>
+    <string name="data_null_error">数据为空</string>
+    <string name="custom_error">自定义异常</string>
+    <string name="response_return_error">服务器返回数据失败</string>
+</resources>
