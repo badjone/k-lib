@@ -25,19 +25,15 @@ class MainActivity : BaseActivity() {
 //
 //        }, PermissionConstants.GROUP_CAMERA)
 
-        HttpHelper.createRetrofit(Api::class.java)
-
 
         button.setOnClickListener {
             downFile()
         }
-
     }
 
     override fun getLayoutId(): Int = R.layout.activity_main
     override fun isShowTitle(): Boolean = true
     override fun showBackIcon(): Boolean = false
-
 
     private fun downFile() {
         val downUrl = "http://192.144.137.174:8081/uploadFile/soft/version/1543800668298687447.apk"

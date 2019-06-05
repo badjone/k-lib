@@ -14,13 +14,12 @@ import androidx.appcompat.R.attr.title
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.FragmentEvent
 import com.trello.rxlifecycle3.components.support.RxFragment
 import com.wugx.k_common.R
-import com.wugx.k_common.base.BaseActivity
+import com.wugx.k_common.base.KBaseActivity
 import com.wugx.k_common.util.utilcode.util.Utils
 
 
@@ -32,7 +31,7 @@ import com.wugx.k_common.util.utilcode.util.Utils
  */
 
 abstract class BaseFragment : RxFragment(), IBaseView {
-    lateinit var baseActivity: BaseActivity
+    lateinit var baseActivity: KBaseActivity
     private lateinit var tvTitle: TextView
 
     open fun isShowTitle(): Boolean = false
@@ -141,7 +140,7 @@ abstract class BaseFragment : RxFragment(), IBaseView {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        baseActivity = context as BaseActivity
+        baseActivity = context as KBaseActivity
     }
 
     override fun onResume() {

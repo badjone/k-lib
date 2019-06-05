@@ -35,7 +35,6 @@ class DownLoadFileService : IntentService("kUtils_down_file") {
         //下载文件名称
         var down_file_name = "zzz.apk"
 
-
         fun startDown(url: String) {
             if (isWorking) {
                 ToastUtils.showShort("正在更新中,请稍后再试")

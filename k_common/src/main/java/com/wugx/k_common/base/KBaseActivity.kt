@@ -27,7 +27,7 @@ import com.wugx.k_utils.base.IBaseView
  * @Date 2019/6/1 11:41
  */
 @SuppressLint("Registered")
-abstract class BaseActivity : RxAppCompatActivity(), IBaseView {
+abstract class KBaseActivity : RxAppCompatActivity(), IBaseView {
 
     abstract fun initCreate(savedInstanceState: Bundle?)
     abstract fun getLayoutId(): Int
