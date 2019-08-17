@@ -1,17 +1,15 @@
 package com.wugx.klibdemo
 
 import android.os.Bundle
-import com.wugx.alarm_pro.net.HttpHelper
-import com.wugx.k_common.base.BaseActivity
+import com.wugx.k_common.base.KBaseActivity
 import com.wugx.k_common.util.utilcode.util.FileUtils
 import com.wugx.k_common.util.utilcode.util.LogUtils
 import com.wugx.k_utils.mvp.model.FileDownloadModel
-import com.wugx.k_utils.net.Api
 import com.wugx.k_utils.net.download.DownloadProgressListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
-class MainActivity : BaseActivity() {
+class MainActivity : KBaseActivity() {
     override fun initCreate(savedInstanceState: Bundle?) {
 
 //        cl_main_content.visibility = View.GONE
@@ -25,15 +23,20 @@ class MainActivity : BaseActivity() {
 //
 //        }, PermissionConstants.GROUP_CAMERA)
 
-
+//
         button.setOnClickListener {
-            downFile()
+            //            downFile()
+
+//            startActivity(null, OtherActivity::class.java)
         }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_main
     override fun isShowTitle(): Boolean = true
     override fun showBackIcon(): Boolean = false
+
+//    fun showStatusBar(): Boolean = true
+//    override fun isUseBaseLayout(): Boolean = true
 
     private fun downFile() {
         val downUrl = "http://192.144.137.174:8081/uploadFile/soft/version/1543800668298687447.apk"

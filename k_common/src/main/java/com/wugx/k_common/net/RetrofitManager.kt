@@ -23,41 +23,41 @@ object RetrofitManager {
     fun getRetrofit(baseUrl: String, map: Map<String, String>): Retrofit {
         // 获取retrofit的实例
         return Retrofit.Builder()
-                .baseUrl(baseUrl)  //自己配置
-                .client(getOkHttpClient(addInterceptorParams(map)).build())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            .baseUrl(baseUrl)  //自己配置
+            .client(getOkHttpClient(addInterceptorParams(map)).build())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     fun getRetrofit(baseUrl: String, httpClient: OkHttpClient, map: Map<String, String>): Retrofit {
         // 获取retrofit的实例
         return Retrofit.Builder()
-                .baseUrl(baseUrl)  //自己配置
-                .client(httpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            .baseUrl(baseUrl)  //自己配置
+            .client(httpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
-     fun getOkHttpClient(interceptor: CommonParamsInterceptor): OkHttpClient.Builder {
+    fun getOkHttpClient(interceptor: CommonParamsInterceptor): OkHttpClient.Builder {
         val cacheFile = File(Utils.getApp().cacheDir, "cache")
         val cache = Cache(cacheFile, (1024 * 1024 * 100).toLong())
 
         return OkHttpClient.Builder()
-                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(true)
-                .addInterceptor(interceptor)
+            .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .addInterceptor(interceptor)
 //                    .addInterceptor(HttpHeaderInterceptor())
-                .addNetworkInterceptor(HttpCacheInterceptor())
-                //https认证 如果要使用https且为自定义证书,自行配制证书。
+            .addNetworkInterceptor(HttpCacheInterceptor())
+            //https认证 如果要使用https且为自定义证书,自行配制证书。
 //                    .sslSocketFactory(SslContextFactory.getSSLSocketFactoryForTwoWay())
 //                    .hostnameVerifier(SafeHostnameVerifier())
-                .cache(cache)
+            .cache(cache)
     }
 
-     fun addInterceptorParams(map: Map<String, String>): CommonParamsInterceptor {
+    fun addInterceptorParams(map: Map<String, String>): CommonParamsInterceptor {
         val builder = CommonParamsInterceptor.Builder()
         for (item in map) {
             builder.addBodyParams(item.key, item.value)

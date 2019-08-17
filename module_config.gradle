@@ -1,0 +1,123 @@
+/**
+ *
+ * module公共配置
+ * 引用：  apply from: "../module_config.gradle"
+ *
+ */
+
+if (isModule.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+    generateStubs = true
+}
+
+android {
+
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+//        if (isModule.toBoolean()) {
+//            applicationId "com.cxz.module.me"
+//        }
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                includeCompileClasspath true
+            }
+        }
+
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+//    resourcePrefix "me_"
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+//            配置manifest路径
+            if (isModule.toBoolean()) {
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                //集成开发模式下排除debug文件夹中的所有Java文件
+                java {
+                    exclude 'debug/**'
+                }
+                kotlin {
+                    exclude 'debug/**'
+                }
+            }
+        }
+    }
+
+
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//    }
+
+    buildTypes {
+
+        debug {
+//            signingConfig signingConfigs.config
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "true"
+            buildConfigField "boolean", "IS_BUILD_MODULE", "${isModule}"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+//            signingConfig signingConfigs.config
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            buildConfigField "boolean", "IS_BUILD_MODULE", "${isModule}"
+            minifyEnabled true
+            if (isModule.toBoolean()) {
+                shrinkResources true
+            }
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation rootProject.ext.testDeps["junit"]
+    androidTestImplementation rootProject.ext.testDeps["runner"]
+    androidTestImplementation rootProject.ext.testDeps["espresso-core"]
+    implementation project(':k_common')
+    kapt rootProject.ext.otherDeps["arouter-compiler"]
+}

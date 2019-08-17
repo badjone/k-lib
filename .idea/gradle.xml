@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/k_common" />
+            <option value="$PROJECT_DIR$/mocule_txt" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

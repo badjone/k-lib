@@ -20,7 +20,7 @@ object KCommon {
     /**
      * 初始化必须调用方法
      */
-    fun create(appContext: Context):KCommon {
+    fun create(appContext: Context): KCommon {
         Utils.init(appContext)
         initSmartLayout()
         return this@KCommon

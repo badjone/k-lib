@@ -10,7 +10,7 @@ import com.wugx.k_common.KCommon
 import com.wugx.k_common.R
 import com.wugx.k_common.util.utilcode.constant.PermissionConstants
 import com.wugx.k_common.util.utilcode.util.*
-import com.wugx.k_utils.net.Api
+import com.wugx.k_utils.net.KApi
 import com.wugx.k_utils.net.RetrofitManager
 import com.wugx.k_utils.utils.NotificationUtil
 import io.reactivex.Observable
@@ -108,7 +108,7 @@ class DownLoadFileService : IntentService("kUtils_down_file") {
                             DownloadProgressResponseBody(originalResponse.body()!!, listener)
                         ).build()
                     })
-                    HttpHelper.createRetrofit(builder.build(), Api::class.java)
+                    HttpHelper.createRetrofit(builder.build(), KApi::class.java)
                         .downloadFile(url)
                         .doOnNext(getConsumer(listener))
                         .compose(SchedulerUtils.ioToMain())

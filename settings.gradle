@@ -1,1 +1,1 @@
-include ':app', ':k_common'
+include ':app', ':k_common', ':mocule_txt'

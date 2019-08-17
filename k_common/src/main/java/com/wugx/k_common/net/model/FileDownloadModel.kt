@@ -9,7 +9,7 @@ import com.wugx.k_common.util.utilcode.util.FileIOUtils
 import com.wugx.k_common.util.utilcode.util.FileUtils
 import com.wugx.k_common.util.utilcode.util.SDCardUtils
 import com.wugx.k_utils.base.IBaseView
-import com.wugx.k_utils.net.Api
+import com.wugx.k_utils.net.KApi
 import com.wugx.k_utils.net.RetrofitManager
 import com.wugx.k_utils.net.download.DownloadProgressListener
 import com.wugx.k_utils.net.download.DownloadProgressResponseBody
@@ -51,7 +51,7 @@ class FileDownloadModel {
                         )
                             .build()
                     })
-                    HttpHelper.createRetrofit(builder.build(), Api::class.java)
+                    HttpHelper.createRetrofit(builder.build(), KApi::class.java)
                         .downloadFile(url)
                         .doOnNext(getConsumer(listener))
                         .compose(SchedulerUtils.ioToMain())

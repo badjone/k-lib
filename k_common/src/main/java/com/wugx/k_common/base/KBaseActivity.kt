@@ -1,8 +1,15 @@
 package com.wugx.k_common.base
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,13 +19,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.ActivityEvent
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 import com.wugx.k_common.R
 import com.wugx.k_common.manager.PageStateManager
+import com.wugx.k_common.util.utilcode.util.ActivityUtils
 import com.wugx.k_utils.base.IBaseView
+import java.lang.ref.WeakReference
 
 /**
  * Activity的基类
@@ -31,15 +41,20 @@ abstract class KBaseActivity : RxAppCompatActivity(), IBaseView {
 
     abstract fun initCreate(savedInstanceState: Bundle?)
     abstract fun getLayoutId(): Int
+
+    val handler: Handler = MyHandler(this@KBaseActivity)
+    private var internalReceiver: BroadcastReceiver? = null
     /**
      * 是否显示toolbar
      */
     open fun isShowTitle(): Boolean = false
-    
+
     /**
      * 是否使用页面回弹效果
      */
     open fun isRebound(): Boolean = true
+
+    open fun isUseBaseLayout(): Boolean = false
 
     /**
      * 判断当前Activity是否在前台。
@@ -61,6 +76,8 @@ abstract class KBaseActivity : RxAppCompatActivity(), IBaseView {
 
 //        EventBus.getDefault().register(this)
         initCreate(savedInstanceState)
+
+
     }
 
     private lateinit var smartRefreshLayout: SmartRefreshLayout
@@ -68,18 +85,21 @@ abstract class KBaseActivity : RxAppCompatActivity(), IBaseView {
     private fun setBaseLayout(): View? {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
+
         val layParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT, 1f
         )
 
         val contentLayout = LayoutInflater.from(this).inflate(getLayoutId(), layout, false)
+
         if (isShowTitle()) {
             val layoutTitle = View.inflate(this, R.layout.layout_title, null)
             val p = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             initActionBar(layoutTitle)
             layout.addView(layoutTitle, p)
         }
+
 
         if (isRebound()) {
             smartRefreshLayout = SmartRefreshLayout(this)
@@ -90,7 +110,12 @@ abstract class KBaseActivity : RxAppCompatActivity(), IBaseView {
         } else {
             layout.addView(contentLayout, layParams)
         }
-        setContentView(layout, layParams)
+
+        val parentLayout = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT, 1f
+        )
+        setContentView(layout, parentLayout)
         return contentLayout
     }
 
@@ -267,5 +292,88 @@ abstract class KBaseActivity : RxAppCompatActivity(), IBaseView {
     override fun showError(msg: String) {
 
 
+    }
+
+
+    protected fun registerReceiver(actionArray: Array<String>?) {
+        if (actionArray == null) {
+            return
+        }
+        val _itFilter = IntentFilter()
+        for (action in actionArray) {
+            _itFilter.addAction(action)
+        }
+
+        if (internalReceiver == null) {
+            internalReceiver = InternalReceiver()
+        }
+        LocalBroadcastManager.getInstance(application).registerReceiver(internalReceiver!!, _itFilter)
+    }
+
+    protected fun sendBroadcast(action: String) {
+        LocalBroadcastManager.getInstance(application).sendBroadcast(Intent(action))
+    }
+
+    override fun sendBroadcast(intent: Intent) {
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+    }
+
+    /**
+     * 用handler时子类可重写该方法
+     */
+    protected fun handlerMessage(msg: Message) {
+
+    }
+
+    /**
+     * 如果子界面需要拦截处理注册的广播
+     * 需要实现该方法
+     *
+     * @param context
+     * @param intent
+     */
+    protected fun handleReceiver(context: Context, intent: Intent) {
+        // 广播处理
+        if (intent == null) {
+            return
+        }
+    }
+
+    private inner class InternalReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent?) {
+            if (intent == null || intent.action == null) {
+                return
+            }
+            handleReceiver(context, intent)
+        }
+    }
+
+    companion object {
+
+        private class MyHandler(ka: KBaseActivity) : Handler() {
+            private var mWf: WeakReference<KBaseActivity> = WeakReference(ka)
+
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                val at = this.mWf.get()
+                at?.let {
+                    it.handlerMessage(msg)
+                }
+            }
+        }
+    }
+
+    fun startActivity(bundle: Bundle?, clz: Class<out Activity>) {
+        if (bundle == null) {
+            ActivityUtils.startActivity(this@KBaseActivity, clz, R.anim.slide_right_in, R.anim.slide_left_out)
+        } else {
+            ActivityUtils.startActivity(
+                bundle,
+                this@KBaseActivity,
+                clz,
+                R.anim.slide_right_in,
+                R.anim.slide_left_out
+            )
+        }
     }
 }

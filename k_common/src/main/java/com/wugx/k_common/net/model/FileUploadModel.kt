@@ -5,7 +5,7 @@ import com.wugx.alarm_pro.net.upload.UploadProgressListener
 import com.wugx.alarm_pro.net.upload.UploadProgressRequestBody
 import com.wugx.k_common.util.utilcode.util.LogUtils
 import com.wugx.k_utils.base.IBaseView
-import com.wugx.k_utils.net.Api
+import com.wugx.k_utils.net.KApi
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -59,7 +59,7 @@ class FileUploadModel {
         })
         builder.addFormDataPart(fileKey, file.name, uploadProgressRequestBody)
         val partList = builder.build().parts()
-        HttpHelper.createRetrofit(Api::class.java)
+        HttpHelper.createRetrofit(KApi::class.java)
                 .uploadFile(url, partList)
                 .subscribeOn(Schedulers.io())
                 .compose(p.bindToLife())
